@@ -3,49 +3,456 @@
 @tailwind utilities;
 
 :root {
-  color: theme(colors.slate);
-  background-color: theme(colors.bg-soft);
+  color-scheme: light;
+  }
+  
+  html.dark {
+    color-scheme: dark;
 }
 
 body {
-  @apply bg-bg-soft text-slate font-body;
+  @apply bg-bg-soft text-slate font-body transition-colors duration-300;
 }
 
+html.dark body {
+  @apply bg-dark-bg text-dark-slate;
+}
+
+/* Buttons */
 .btn {
-  @apply rounded-mdplus px-4 py-2 font-label transition-transform duration-200 active:scale-95;
+  @apply rounded-mdplus px-4 py-2 font-label transition-all duration-200 active:scale-95;
 }
 
 .btn-primary {
-  @apply bg-primary text-white shadow-soft hover:brightness-110;
+  @apply bg-primary text-white shadow-soft hover:brightness-110 dark:bg-dark-primary dark:text-white dark:hover:brightness-125 dark:shadow-dark-soft;
 }
 
 .btn-accent {
-  @apply bg-accent text-slate font-semibold shadow-soft hover:brightness-110;
+  @apply bg-accent text-white font-semibold shadow-soft hover:brightness-110 dark:bg-dark-accent dark:text-dark-bg dark:hover:brightness-125 dark:shadow-dark-soft;
 }
 
+/* Cards */
 .card {
-  @apply bg-card rounded-mdplus shadow-soft p-5 border border-border;
+  @apply bg-card text-slate rounded-mdplus shadow-soft p-5 border border-border transition-all duration-300;
+    @apply dark:bg-dark-card dark:text-dark-slate dark:border-dark-border dark:shadow-dark-soft;
 }
 
+/* Pills/Tags */
 .pill {
-  @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-white border border-border text-muted;
+  @apply inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-bg-soft border border-border text-muted transition-all duration-300;
+    @apply dark:bg-dark-card dark:border-dark-border dark:text-dark-muted;
 }
 
+/* Sidebar */
 .sidebar-link {
-  @apply flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted hover:bg-white hover:text-primary transition-colors;
+  @apply flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-muted hover:bg-bg-soft hover:text-primary transition-all duration-200;
+    @apply dark:text-dark-muted dark:hover:bg-dark-card dark:hover:text-dark-primary;
 }
 
 .sidebar-link.active {
-  @apply bg-white text-primary shadow-soft;
+  @apply bg-bg-soft text-primary shadow-soft dark:bg-dark-card dark:text-dark-primary;
 }
 
+/* Stats Cards */
 .stat-card {
   @apply card flex flex-col gap-2;
 }
 
+/* Glass Effect */
 .glass {
   backdrop-filter: blur(24px);
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 15px 40px rgba(3, 27, 78, 0.08);
-}
+  box-shadow: 0 15px 40px rgba(14, 33, 90, 0.08);
+    transition: all 0.3s ease;
+  }
+  
+  html.dark .glass {
+    background: rgba(26, 31, 53, 0.95);
+    border: 1px solid rgba(45, 53, 71, 0.8);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Forms - Input, Textarea, Select */
+  input,
+  textarea,
+  select {
+    @apply bg-white text-slate border-border transition-colors duration-300;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-muted;
+  }
+  
+  html.dark input,
+  html.dark textarea,
+  html.dark select {
+    @apply bg-dark-card text-dark-slate border-dark-border;
+  }
+  
+  html.dark input::placeholder,
+  html.dark textarea::placeholder {
+    @apply text-dark-muted;
+  }
+  
+  html.dark input:focus,
+  html.dark textarea:focus,
+  html.dark select:focus {
+    @apply border-dark-primary;
+  }
+  
+  /* Links */
+  a {
+    @apply text-primary transition-colors duration-200;
+  }
+  
+  a:hover {
+    @apply text-blue-600;
+  }
+  
+  html.dark a {
+    @apply text-dark-primary;
+  }
+  
+  html.dark a:hover {
+    @apply text-blue-400;
+  }
+  
+  /* Tables */
+  table {
+    @apply border-collapse;
+  }
+  
+  th,
+  td {
+    @apply border-border transition-colors duration-300;
+    @apply dark:border-dark-border;
+  }
+  
+  th {
+    @apply bg-bg-soft text-slate font-semibold;
+    @apply dark:bg-dark-card dark:text-dark-slate;
+  }
+  
+  tr:hover {
+    @apply bg-bg-soft;
+  }
+  
+  html.dark tr:hover {
+    @apply bg-dark-card;
+  }
+  
+  
+  /* Calendar styling */
+  .react-calendar {
+    @apply bg-card border-border dark:bg-dark-card dark:border-dark-border;
+  }
+  
+  .react-calendar button {
+    @apply text-slate dark:text-dark-slate;
+  }
+  
+  .react-calendar button:hover {
+    @apply bg-bg-soft dark:bg-dark-border;
+  }
+  
+  .react-calendar .react-calendar__month-view__days__day--weekend {
+    @apply text-slate dark:text-dark-slate;
+  }
+  
+  /* React Big Calendar - Main Calendar Container */
+  .rbc-calendar {
+    background-color: var(--color-card);
+    color: var(--color-slate);
+  }
+  
+  html.dark .rbc-calendar {
+    background-color: var(--color-dark-card);
+    color: var(--color-dark-slate);
+  }
+  
+  /* Calendar Toolbar */
+  .rbc-toolbar {
+    background-color: var(--color-card);
+    color: var(--color-slate);
+    border-bottom: 1px solid var(--color-border);
+    padding: 12px;
+  }
+  
+  html.dark .rbc-toolbar {
+    background-color: var(--color-dark-card);
+    color: var(--color-dark-slate);
+    border-bottom-color: var(--color-dark-border);
+  }
+  
+  .rbc-toolbar button {
+    background-color: var(--color-card);
+    color: var(--color-slate);
+    border: 1px solid var(--color-border);
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+  }
+  
+  html.dark .rbc-toolbar button {
+    background-color: var(--color-dark-card);
+    color: var(--color-dark-slate);
+    border-color: var(--color-dark-border);
+  }
+  
+  .rbc-toolbar button:hover {
+    background-color: rgba(75, 120, 255, 0.1);
+    color: var(--color-primary);
+  }
+  
+  html.dark .rbc-toolbar button:hover {
+    background-color: rgba(107, 142, 255, 0.2);
+    color: var(--color-dark-primary);
+  }
+  
+  .rbc-toolbar button.rbc-active {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  html.dark .rbc-toolbar button.rbc-active {
+    background-color: var(--color-dark-primary);
+    color: white;
+  }
+  
+  .rbc-toolbar-label {
+    color: var(--color-slate);
+    font-weight: 600;
+  }
+  
+  html.dark .rbc-toolbar-label {
+    color: var(--color-dark-slate);
+  }
+  
+  /* Calendar Headers */
+  .rbc-header {
+    background-color: var(--color-bg-soft);
+    color: var(--color-slate);
+    border-bottom: 1px solid var(--color-border);
+    padding: 8px;
+    font-weight: 600;
+  }
+  
+  html.dark .rbc-header {
+    background-color: var(--color-dark-border);
+    color: var(--color-dark-slate);
+    border-bottom-color: var(--color-dark-border);
+  }
+  
+  /* Calendar Month View */
+  .rbc-month-view {
+    background-color: var(--color-card);
+    border: 1px solid var(--color-border);
+  }
+  
+  html.dark .rbc-month-view {
+    background-color: var(--color-dark-card);
+    border-color: var(--color-dark-border);
+  }
+  
+  .rbc-month-row {
+    border-top: 1px solid var(--color-border);
+    min-height: 100px;
+  }
+  
+  html.dark .rbc-month-row {
+    border-top-color: var(--color-dark-border);
+  }
+  
+  .rbc-date-cell {
+    padding: 4px;
+    text-align: right;
+  }
+  
+  .rbc-date-cell a {
+    color: var(--color-slate);
+    font-weight: 500;
+  }
+  
+  html.dark .rbc-date-cell a {
+    color: var(--color-dark-slate);
+  }
+  
+  .rbc-date-cell a:hover {
+    color: var(--color-primary);
+  }
+  
+  html.dark .rbc-date-cell a:hover {
+    color: var(--color-dark-primary);
+  }
+  
+  /* Today indicator */
+  .rbc-today {
+    background-color: rgba(75, 120, 255, 0.1);
+  }
+  
+  html.dark .rbc-today {
+    background-color: rgba(107, 142, 255, 0.15);
+  }
+  
+  /* Off-range days */
+  .rbc-off-range-bg {
+    background-color: #f5f5f5;
+  }
+  
+  html.dark .rbc-off-range-bg {
+    background-color: var(--color-dark-bg);
+  }
+  
+  /* Day and Time Views */
+  .rbc-day-bg,
+  .rbc-time-slot {
+    background-color: var(--color-card);
+    border-color: var(--color-border);
+  }
+  
+  html.dark .rbc-day-bg,
+  html.dark .rbc-time-slot {
+    background-color: var(--color-dark-card);
+    border-color: var(--color-dark-border);
+  }
+  
+  .rbc-time-header {
+    background-color: var(--color-card);
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  html.dark .rbc-time-header {
+    background-color: var(--color-dark-card);
+    border-bottom-color: var(--color-dark-border);
+  }
+  
+  .rbc-time-header-content {
+    background-color: var(--color-card);
+    border-color: var(--color-border);
+  }
+  
+  html.dark .rbc-time-header-content {
+    background-color: var(--color-dark-card);
+    border-color: var(--color-dark-border);
+  }
+  
+  .rbc-time-content {
+    background-color: var(--color-card);
+    border-top: 1px solid var(--color-border);
+  }
+  
+  html.dark .rbc-time-content {
+    background-color: var(--color-dark-card);
+    border-top-color: var(--color-dark-border);
+  }
+  
+  .rbc-timeslot-group {
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  html.dark .rbc-timeslot-group {
+    border-bottom-color: var(--color-dark-border);
+  }
+  
+  /* Current time indicator */
+  .rbc-current-time-indicator {
+    background-color: #ef4444;
+  }
+  
+  /* Event styling */
+  .rbc-event {
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 6px;
+    padding: 2px 4px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  
+  .rbc-event:hover {
+    box-shadow: 0 4px 12px rgba(75, 120, 255, 0.3);
+  }
+  
+  html.dark .rbc-event:hover {
+    box-shadow: 0 4px 12px rgba(107, 142, 255, 0.3);
+  }
+  
+  .rbc-event-label {
+    font-size: 11px;
+  }
+  
+  .rbc-event-content {
+    font-size: 11px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Selected event */
+  .rbc-selected {
+    background-color: rgba(75, 120, 255, 0.15);
+  }
+  
+  html.dark .rbc-selected {
+    background-color: rgba(107, 142, 255, 0.2);
+  }
+  
+  .rbc-event:hover {
+    box-shadow: 0 4px 12px rgba(75, 120, 255, 0.3);
+  }
+  
+  .rbc-event-label {
+    font-size: 11px;
+  }
+  
+  .rbc-event-content {
+    font-size: 11px;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-bg-soft);
+  }
+  
+  html.dark ::-webkit-scrollbar-track {
+    background-color: var(--color-dark-bg);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 4px;
+  }
+  
+  html.dark ::-webkit-scrollbar-thumb {
+    background-color: var(--color-dark-border);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-muted);
+  }
+  
+  html.dark ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-dark-muted);
+  }
+  
+  /* Selection */
+  ::selection {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  html.dark ::selection {
+    background-color: var(--color-dark-primary);
+    color: var(--color-dark-slate);
+  }
+

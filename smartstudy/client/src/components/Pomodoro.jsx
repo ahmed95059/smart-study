@@ -94,12 +94,12 @@ export default function Pomodoro(){
         <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
           <Timer className="text-accent" size={20}/>
         </div>
-        <h3 className="text-lg font-title text-slate">Pomodoro Timer</h3>
+        <h3 className="text-lg font-title text-slate dark:text-dark-slate">Pomodoro Timer</h3>
       </div>
 
       <div className="text-center space-y-6 py-8">
         <div className="text-7xl font-bold text-primary tracking-tight">{mm}:{ss}</div>
-        <p className="text-sm text-muted">Focus Time</p>
+        <p className="text-sm text-muted dark:text-dark-muted">Focus Time</p>
         
         <div className="flex justify-center gap-3">
           <button 
@@ -109,7 +109,7 @@ export default function Pomodoro(){
             <Play size={18}/> {running ? 'Pause' : 'Start'}
           </button>
           <button 
-            className="btn bg-white border border-border hover:bg-gray-50 text-slate flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all" 
+            className="btn bg-white border border-border dark:border-dark-border hover:bg-gray-50 dark:hover:bg-dark-border dark:bg-dark-card text-slate dark:text-dark-slate flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all" 
             onClick={reset}
           >
             <RotateCcw size={18}/> Reset
@@ -117,14 +117,14 @@ export default function Pomodoro(){
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
+      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border dark:border-dark-border">
         <div className="text-center">
-          <p className="text-2xl font-bold text-slate">{stats.sessions}</p>
-          <p className="text-xs text-muted mt-1">Sessions Today</p>
+          <p className="text-2xl font-bold text-slate dark:text-dark-slate">{stats.sessions}</p>
+          <p className="text-xs text-muted dark:text-dark-muted mt-1">Sessions Today</p>
         </div>
         <div className="text-center">
-          <p className="text-2xl font-bold text-slate">{Math.floor(stats.focusMinutes / 60)}h {stats.focusMinutes % 60}m</p>
-          <p className="text-xs text-muted mt-1">Total Focus</p>
+          <p className="text-2xl font-bold text-slate dark:text-dark-slate">{Math.floor(stats.focusMinutes / 60)}h {stats.focusMinutes % 60}m</p>
+          <p className="text-xs text-muted dark:text-dark-muted mt-1">Total Focus</p>
         </div>
       </div>
     </div>

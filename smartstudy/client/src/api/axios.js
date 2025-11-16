@@ -2,11 +2,17 @@ import axios from 'axios'
 
 const baseURL = import.meta.env.VITE_API_URL ?? 'http://localhost:5000/api'
 
-const api = axios.create({ baseURL })
+const api = axios.create({ 
+  baseURL,
+  withCredentials: true
+})
 
-api.interceptors.request.use((config)=>{
+// Request interceptor - add token to every request
+api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
-  if(token) config.headers.Authorization = `Bearer ${token}`
+  if(token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   return config
 })
 
@@ -24,12 +30,12 @@ api.interceptors.response.use(
       console.error('Validation Errors:', error.response.data.errors)
     }
     
-    // Handle authentication errors
+    // Handle authentication errors - clear token and redirect to login
     if (error.response?.status === 401) {
-      console.error('Authentication failed')
-      // Optionally redirect to login or clear token
-      // localStorage.removeItem('token')
-      // window.location.href = '/login'
+      console.error('Authentication failed - clearing token')
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      window.location.href = '/login'
     }
     
     return Promise.reject(error)

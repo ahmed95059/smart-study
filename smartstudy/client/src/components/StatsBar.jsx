@@ -98,12 +98,12 @@ export default function StatsBar(){
       {stats.map((card) => (
         <div key={card.label} className="stat-card">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm text-muted">{card.label}</p>
+            <p className="text-sm text-muted dark:text-dark-muted">{card.label}</p>
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${card.accent}`}>
               <card.icon size={20}/>
             </div>
           </div>
-          <div className="text-3xl font-title text-slate font-bold">{card.value}</div>
+          <div className="text-3xl font-title text-slate dark:text-dark-slate font-bold">{card.value}</div>
         </div>
       ))}
     </div>

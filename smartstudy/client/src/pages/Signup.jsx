@@ -47,38 +47,39 @@ export default function Signup(){
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-5xl grid md:grid-cols-2 bg-card rounded-[32px] overflow-hidden shadow-soft border border-border">
+      <div className="w-full max-w-5xl grid md:grid-cols-2 bg-card dark:bg-dark-card rounded-[32px] overflow-hidden shadow-soft dark:shadow-dark-soft border border-border dark:border-dark-border">
         <div className="p-10 md:p-14 space-y-6">
           <div>
-            <p className="text-sm uppercase tracking-[0.4em] text-muted">Start your journey</p>
-            <h1 className="text-3xl font-title text-slate mt-3">Create an account</h1>
-            <p className="text-muted text-sm mt-2">Boost your productivity today.</p>
+            <p className="text-sm uppercase tracking-[0.4em] text-muted dark:text-dark-muted">Start your journey</p>
+            <h1 className="text-3xl font-title text-slate dark:text-dark-slate mt-3">Create an account</h1>
+            <p className="text-muted dark:text-dark-muted text-sm mt-2">Boost your productivity today.</p>
           </div>
           <form className="space-y-4" onSubmit={submit}>
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate">Full Name</label>
-              <input className="w-full border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40" value={name} onChange={e=>setName(e.target.value)} placeholder="John Doe" required/>
+              <label className="text-sm font-semibold text-slate dark:text-dark-slate">Full Name</label>
+              <input className="w-full border border-border dark:border-dark-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40 dark:bg-dark-card dark:text-dark-slate" value={name} onChange={e=>setName(e.target.value)} placeholder="John Doe" required/>
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate">Email Address</label>
-              <input className="w-full border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@university.edu" required/>
+              <label className="text-sm font-semibold text-slate dark:text-dark-slate">Email Address</label>
+              <input className="w-full border border-border dark:border-dark-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40 dark:bg-dark-card dark:text-dark-slate" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@university.edu" required/>
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate">Password</label>
-              <input className="w-full border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="At least 8 characters" required/>
+              <label className="text-sm font-semibold text-slate dark:text-dark-slate">Password</label>
+              <input className="w-full border border-border dark:border-dark-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40 dark:bg-dark-card dark:text-dark-slate" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="At least 6 characters + number" required/>
+              <p className="text-xs text-muted dark:text-dark-muted mt-1">Must be 6+ characters and contain at least 1 number</p>
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate">Confirm Password</label>
-              <input className="w-full border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40" type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Re-enter your password" required/>
+              <label className="text-sm font-semibold text-slate dark:text-dark-slate">Confirm Password</label>
+              <input className="w-full border border-border dark:border-dark-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40 dark:bg-dark-card dark:text-dark-slate" type="password" value={confirm} onChange={e=>setConfirm(e.target.value)} placeholder="Re-enter your password" required/>
             </div>
-            <label className="flex items-center gap-2 text-sm text-muted">
+            <label className="flex items-center gap-2 text-sm text-muted dark:text-dark-muted">
               <input type="checkbox" checked={agree} onChange={e=>setAgree(e.target.checked)} />
-              I agree to the <span className="text-primary font-semibold">Terms & Conditions</span>
+              I agree to the <span className="text-primary dark:text-dark-primary font-semibold">Terms & Conditions</span>
             </label>
             <button className="btn btn-primary w-full">Create Account</button>
           </form>
-          <div className="text-center text-sm text-muted">
-            Already have an account? <Link to="/login" className="text-primary font-semibold">Sign in</Link>
+          <div className="text-center text-sm text-muted dark:text-dark-muted">
+            Already have an account? <Link to="/login" className="text-primary dark:text-dark-primary font-semibold">Sign in</Link>
           </div>
         </div>
         <Aside/>

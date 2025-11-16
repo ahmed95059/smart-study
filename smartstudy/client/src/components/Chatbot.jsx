@@ -120,30 +120,30 @@ export default function Chatbot(){
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Bot className="text-primary" size={20}/>
           </div>
-          <h3 className="text-lg font-title text-slate">AI Assistant</h3>
+          <h3 className="text-lg font-title text-slate dark:text-dark-slate">AI Assistant</h3>
         </div>
-        <button className="text-muted hover:text-slate transition-colors">
+        <button className="text-muted dark:text-dark-muted hover:text-slate dark:hover:text-dark-slate transition-colors">
           <Maximize2 size={18}/>
         </button>
       </div>
 
-      <div className="rounded-2xl border border-border bg-bg-soft/30 p-4 space-y-4 h-[500px] flex flex-col">
+      <div className="rounded-2xl border border-border dark:border-dark-border bg-bg-soft dark:bg-dark-card/30 p-4 space-y-4 h-[500px] flex flex-col">
         <div className="flex-1 overflow-auto space-y-3 pr-2">
           {log.map((msg, idx)=>(
             <div key={idx} className={`flex ${msg.role==='user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${msg.role==='user' ? 'bg-primary text-white' : 'bg-white text-slate border border-border'}`}>
+              <div className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${msg.role==='user' ? 'bg-primary text-white' : 'bg-card dark:bg-dark-card text-slate dark:text-dark-slate border border-border dark:border-dark-border'}`}>
                 <div className="flex items-center gap-2 font-semibold mb-2 text-xs">
                   {msg.role==='user' ? <UserRound size={14}/> : <Bot size={14} className="text-primary"/>} {msg.role==='user'?'You':'Smart Assistant'}
                 </div>
                 <p className={`${msg.tone==='error' ? 'text-error font-semibold' : ''}`}>{msg.content}</p>
                 {msg.event && (
-                  <div className="mt-3 space-y-1 text-[13px] text-muted">
-                    <div className="font-semibold text-slate">{msg.event.title}</div>
-                    <div>{formatDateTime(msg.event.start)} → {formatDateTime(msg.event.end)}</div>
+                  <div className="mt-3 space-y-1 text-[13px] text-muted dark:text-dark-muted">
+                    <div className="font-semibold text-slate dark:text-dark-slate">{msg.event.title}</div>
+                    <div className="text-muted dark:text-dark-muted">{formatDateTime(msg.event.start)} → {formatDateTime(msg.event.end)}</div>
                     {(msg.event.location || msg.event.notes) && (
                       <div className="flex items-center gap-2">
                         {msg.event.location && (<><MapPin size={12}/> {msg.event.location}</>)}
-                        {msg.event.notes && <span className="text-muted/80">• {msg.event.notes}</span>}
+                        {msg.event.notes && <span className="text-muted dark:text-dark-muted/80">• {msg.event.notes}</span>}
                       </div>
                     )}
                   </div>
@@ -151,34 +151,34 @@ export default function Chatbot(){
                 {msg.events && (
                   <div className="mt-3 space-y-2">
                     {msg.events.map(evt => (
-                      <div key={evt._id} className="rounded-xl border border-border bg-white text-slate px-3 py-2">
+                      <div key={evt._id} className="rounded-xl border border-border dark:border-dark-border bg-card dark:bg-dark-card text-slate dark:text-dark-slate px-3 py-2">
                         <div className="font-semibold">{evt.title}</div>
-                        <div className="text-xs text-muted">{formatDateTime(evt.start)} → {formatDateTime(evt.end)}</div>
-                        {evt.location && <div className="text-xs text-muted flex items-center gap-1"><MapPin size={10}/> {evt.location}</div>}
+                        <div className="text-xs text-muted dark:text-dark-muted">{formatDateTime(evt.start)} → {formatDateTime(evt.end)}</div>
+                        {evt.location && <div className="text-xs text-muted dark:text-dark-muted flex items-center gap-1"><MapPin size={10}/> {evt.location}</div>}
                       </div>
                     ))}
                   </div>
                 )}
                 {msg.task && (
-                  <div className="mt-3 rounded-xl border border-border bg-white text-slate px-3 py-2 flex items-start gap-3">
-                    <CheckSquare size={16} className={msg.task.done ? 'text-primary' : 'text-muted'}/>
+                  <div className="mt-3 rounded-xl border border-border dark:border-dark-border bg-card dark:bg-dark-card text-slate dark:text-dark-slate px-3 py-2 flex items-start gap-3">
+                    <CheckSquare size={16} className={msg.task.done ? 'text-primary' : 'text-muted dark:text-dark-muted'}/>
                     <div>
                       <div className="font-semibold">{msg.task.title}</div>
-                      {msg.task.due && <div className="text-xs text-muted">Due {formatDateTime(msg.task.due)}</div>}
-                      {msg.task.notes && <div className="text-xs text-muted">Notes: {msg.task.notes}</div>}
+                      {msg.task.due && <div className="text-xs text-muted dark:text-dark-muted">Due {formatDateTime(msg.task.due)}</div>}
+                      {msg.task.notes && <div className="text-xs text-muted dark:text-dark-muted">Notes: {msg.task.notes}</div>}
                     </div>
                   </div>
                 )}
                 {msg.tasks && (
                   <div className="mt-3 space-y-2">
                     {msg.tasks.map(task => (
-                      <div key={task._id} className="rounded-xl border border-border bg-white text-slate px-3 py-2">
+                      <div key={task._id} className="rounded-xl border border-border dark:border-dark-border bg-card dark:bg-dark-card text-slate dark:text-dark-slate px-3 py-2">
                         <div className="font-semibold flex items-center gap-2">
-                          <CheckSquare size={14} className={task.done ? 'text-primary' : 'text-muted'}/>
+                          <CheckSquare size={14} className={task.done ? 'text-primary' : 'text-muted dark:text-dark-muted'}/>
                           {task.title}
                         </div>
-                        {task.due && <div className="text-xs text-muted">{formatDateTime(task.due)}</div>}
-                        {task.notes && <div className="text-xs text-muted">Notes: {task.notes}</div>}
+                        {task.due && <div className="text-xs text-muted dark:text-dark-muted">{formatDateTime(task.due)}</div>}
+                        {task.notes && <div className="text-xs text-muted dark:text-dark-muted">Notes: {task.notes}</div>}
                       </div>
                     ))}
                   </div>
@@ -186,7 +186,7 @@ export default function Chatbot(){
                 {msg.suggestions && msg.suggestions.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {msg.suggestions.map((text, i)=>(
-                      <button key={i} onClick={()=>setInput(text)} className="px-3 py-1 rounded-full border border-border text-xs bg-white text-slate hover:border-primary">
+                      <button key={i} onClick={()=>setInput(text)} className="px-3 py-1 rounded-full border border-border dark:border-dark-border text-xs bg-bg-soft dark:bg-dark-card text-slate dark:text-dark-slate hover:border-primary dark:hover:border-dark-primary">
                         {text}
                       </button>
                     ))}
@@ -195,11 +195,11 @@ export default function Chatbot(){
               </div>
             </div>
           ))}
-          {loading && <div className="text-xs text-muted">Thinking...</div>}
+          {loading && <div className="text-xs text-muted dark:text-dark-muted">Thinking...</div>}
         </div>
         <div className="flex gap-2">
           <input
-            className="flex-1 border border-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 bg-white"
+            className="flex-1 border border-border dark:border-dark-border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 bg-white dark:bg-dark-card text-slate dark:text-dark-slate"
             placeholder='Ask me anything...'
             value={input}
             onChange={e=>setInput(e.target.value)}

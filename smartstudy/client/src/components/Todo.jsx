@@ -58,8 +58,8 @@ export default function Todo(){
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-title text-slate">Tasks</h3>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted">All / Study / Assignment / Personal</p>
+          <h3 className="text-lg font-title text-slate dark:text-dark-slate">Tasks</h3>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted dark:text-dark-muted">All / Study / Assignment / Personal</p>
         </div>
         <button className="btn btn-primary flex items-center gap-2" onClick={add}>
           <Plus size={16}/> Add Task
@@ -71,17 +71,17 @@ export default function Todo(){
           <button
             key={name}
             onClick={()=>setTab(name)}
-            className={`px-4 py-1.5 rounded-full border ${tab===name ? 'bg-primary text-white border-primary' : 'border-border text-muted'}`}
+            className={`px-4 py-1.5 rounded-full border ${tab===name ? 'bg-primary text-white border-primary' : 'border-border text-muted dark:border-dark-border dark:text-dark-muted'}`}
           >
             {name}
           </button>
         ))}
       </div>
 
-      <div className="rounded-2xl border border-border bg-white/60 p-4 space-y-3">
+      <div className="rounded-2xl border border-border dark:border-dark-border bg-white/60 dark:bg-dark-card/60 p-4 space-y-3">
         <div className="flex gap-2">
           <input
-            className="flex-1 border border-border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="flex-1 border border-border dark:border-dark-border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white dark:bg-dark-bg text-slate dark:text-dark-slate"
             placeholder="Review calculus notes..."
             value={input}
             onChange={e=>setInput(e.target.value)}
@@ -94,23 +94,23 @@ export default function Todo(){
           {filtered.map(task => {
             const category = detectCategory(task.title)
             return (
-              <div key={task._id} className="flex items-center justify-between rounded-2xl border border-border px-4 py-3 bg-bg-soft">
+              <div key={task._id} className="flex items-center justify-between rounded-2xl border border-border dark:border-dark-border px-4 py-3 bg-bg-soft dark:bg-dark-border">
                 <label className="flex items-center gap-3 max-w-[70%]">
                   <input type="checkbox" checked={task.done} onChange={()=>toggle(task)} />
                   <div>
-                    <p className={`font-semibold ${task.done ? 'line-through text-muted' : 'text-slate'}`}>{task.title}</p>
-                    {task.due && <p className="text-xs text-muted">Due {new Date(task.due).toLocaleDateString()}</p>}
+                    <p className={`font-semibold ${task.done ? 'line-through text-muted dark:text-dark-muted' : 'text-slate dark:text-dark-slate'}`}>{task.title}</p>
+                    {task.due && <p className="text-xs text-muted dark:text-dark-muted">Due {new Date(task.due).toLocaleDateString()}</p>}
                   </div>
                 </label>
                 <div className="flex items-center gap-3">
                   <span className="pill">{category}</span>
-                  <button onClick={()=>remove(task)} className="text-muted hover:text-error"><Trash2 size={16}/></button>
+                  <button onClick={()=>remove(task)} className="text-muted dark:text-dark-muted hover:text-error"><Trash2 size={16}/></button>
                 </div>
               </div>
             )
           })}
           {filtered.length === 0 && (
-            <div className="text-center text-muted py-10 text-sm">No tasks yet. Add your first one!</div>
+            <div className="text-center text-muted dark:text-dark-muted py-10 text-sm">No tasks yet. Add your first one!</div>
           )}
         </div>
       </div>

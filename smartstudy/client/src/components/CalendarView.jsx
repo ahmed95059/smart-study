@@ -85,7 +85,7 @@ export default function CalendarView(){
       onSelectSlot={onCreate}
       onDoubleClickEvent={onRename}
       eventPropGetter={eventPropGetter}
-      style={{ height: 560 }}
+      style={{ height: 800 }}
     />
   );
 }

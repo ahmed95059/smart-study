@@ -41,33 +41,33 @@ export default function Login(){
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-5xl grid md:grid-cols-2 bg-card rounded-[32px] overflow-hidden shadow-soft border border-border">
+      <div className="w-full max-w-5xl grid md:grid-cols-2 bg-card dark:bg-dark-card rounded-[32px] overflow-hidden shadow-soft dark:shadow-dark-soft border border-border dark:border-dark-border">
         <div className="p-10 md:p-14 space-y-6">
           <div>
-            <p className="text-sm uppercase tracking-[0.4em] text-muted">Welcome Back</p>
-            <h1 className="text-3xl font-title text-slate mt-3">Sign in to SmartStudy</h1>
-            <p className="text-muted text-sm mt-2">Continue your productivity journey.</p>
+            <p className="text-sm uppercase tracking-[0.4em] text-muted dark:text-dark-muted">Welcome Back</p>
+            <h1 className="text-3xl font-title text-slate dark:text-dark-slate mt-3">Sign in to SmartStudy</h1>
+            <p className="text-muted dark:text-dark-muted text-sm mt-2">Continue your productivity journey.</p>
           </div>
           <form className="space-y-4" onSubmit={submit}>
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate">Email Address</label>
-              <input className="w-full border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@university.edu" required/>
+              <label className="text-sm font-semibold text-slate dark:text-dark-slate">Email Address</label>
+              <input className="w-full border border-border dark:border-dark-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40 dark:bg-dark-card dark:text-dark-slate" type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@university.edu" required/>
             </div>
             <div className="space-y-1">
-              <label className="text-sm font-semibold text-slate">Password</label>
-              <input className="w-full border border-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required/>
+              <label className="text-sm font-semibold text-slate dark:text-dark-slate">Password</label>
+              <input className="w-full border border-border dark:border-dark-border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/40 dark:bg-dark-card dark:text-dark-slate" type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="Enter your password" required/>
             </div>
             <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 text-muted">
+              <label className="flex items-center gap-2 text-muted dark:text-dark-muted">
                 <input type="checkbox" checked={remember} onChange={e=>setRemember(e.target.checked)} />
                 Remember me
               </label>
-              <button type="button" className="text-primary font-semibold">Forgot password?</button>
+              <button type="button" className="text-primary dark:text-dark-primary font-semibold">Forgot password?</button>
             </div>
             <button className="btn btn-primary w-full">Sign In</button>
           </form>
-          <div className="text-center text-sm text-muted">
-            Don’t have an account? <Link to="/signup" className="text-primary font-semibold">Sign Up</Link>
+          <div className="text-center text-sm text-muted dark:text-dark-muted">
+            Don't have an account? <Link to="/signup" className="text-primary dark:text-dark-primary font-semibold">Sign Up</Link>
           </div>
         </div>
         <Aside/>
