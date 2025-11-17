@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import CalendarView from "../components/CalendarView.jsx";
 import Pomodoro from "../components/Pomodoro.jsx";
 import Todo from "../components/Todo.jsx";
@@ -9,7 +9,7 @@ import UpcomingEvents from "../components/UpcomingEvents.jsx";
 import ThemeToggle from "../components/ThemeToggle.jsx";
 import Papa from "papaparse";
 import { createEvent } from "../api/events";
-import { CalendarDays, LayoutDashboard, ListTodo, LogOut, NotebookPen, Settings, Timer, Upload, Wand2 } from "lucide-react";
+import { CalendarDays, LayoutDashboard, ListTodo, LogOut, NotebookPen, Settings, Timer, Upload, Wand2, X } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 
 const mainNav = [
@@ -29,6 +29,7 @@ const secondaryNav = [
 export default function Dashboard(){
   const fileRef = useRef();
   const { user, logout } = useAuth();
+  const [expandedModal, setExpandedModal] = useState(null);
 
   const initials = useMemo(()=>{
     if(!user?.name) return 'JD';
@@ -75,8 +76,38 @@ export default function Dashboard(){
           {mainNav.map(item => {
             const Icon = item.icon;
             const active = item.label === 'Dashboard';
+            const isAIAssistant = item.label === 'AI Assistant';
+            const isCalendar = item.label === 'Calendar';
+            const isTasks = item.label === 'Tasks';
+            const isNotes = item.label === 'Notes';
+            const isPomodoro = item.label === 'Pomodoro';
+            
+            const handler = () => {
+              if (isAIAssistant) setExpandedModal('chatbot');
+              else if (isCalendar) setExpandedModal('calendar');
+              else if (isTasks) setExpandedModal('tasks');
+              else if (isNotes) setExpandedModal('notes');
+              else if (isPomodoro) setExpandedModal('pomodoro');
+            };
+            
+            const shouldExpand = isAIAssistant || isCalendar || isTasks || isNotes || isPomodoro;
+            
             return (
-              <button key={item.label} className={`sidebar-link ${active ? 'active' : ''}`}>
+              <button 
+                key={item.label} 
+                className={`sidebar-link ${active ? 'active' : ''} ${
+                  shouldExpand
+                    ? 'relative group hover:bg-gradient-to-r hover:from-primary/20 hover:to-accent/20 dark:hover:from-dark-primary/20 dark:hover:to-dark-accent/20 transition-all duration-300' 
+                    : ''
+                } ${shouldExpand ? 'cursor-pointer' : ''}`}
+                onClick={handler}
+              >
+                {shouldExpand && (
+                  <>
+                    <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-10 transition-opacity duration-300 blur"></div>
+                    <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-pulse"></div>
+                  </>
+                )}
                 <Icon size={18}/> {item.label}
               </button>
             )
@@ -126,30 +157,133 @@ export default function Dashboard(){
           </div>
 
           <div className="grid gap-6 xl:grid-cols-3">
-            <div className="card xl:col-span-2">
+            <div className="card chatbot-card-click cursor-pointer xl:col-span-2" onClick={() => setExpandedModal('calendar')}>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-title text-slate dark:text-dark-slate">Calendar</h3>
               </div>
               <CalendarView />
             </div>
-            <div className="card">
+            <div className="card chatbot-card-click cursor-pointer" onClick={() => setExpandedModal('tasks')}>
               <Todo />
             </div>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-3">
-            <div className="card">
+            <div className="card chatbot-card-click cursor-pointer" onClick={() => setExpandedModal('pomodoro')}>
               <Pomodoro />
             </div>
-            <div className="card">
+            <div className="card chatbot-card-click cursor-pointer" onClick={() => setExpandedModal('notes')}>
               <Notes />
             </div>
-            <div className="card">
-              <Chatbot />
+            <div className="card chatbot-card-click cursor-pointer" onClick={() => setExpandedModal('chatbot')}>
+              <div className="relative w-full h-full">
+                <Chatbot />
+              </div>
             </div>
           </div>
         </section>
       </main>
+
+      {/* Expanded Modal for Calendar */}
+      {expandedModal === 'calendar' && (
+        <div className="fixed inset-0 z-50 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-dark-card rounded-3xl w-full max-w-6xl h-[90vh] flex flex-col shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-8 duration-500 ease-out origin-bottom">
+            <div className="flex items-center justify-between p-6 border-b border-border dark:border-dark-border">
+              <h2 className="text-2xl font-title text-slate dark:text-dark-slate animate-in fade-in duration-300 delay-100">Calendar</h2>
+              <button 
+                onClick={() => setExpandedModal(null)}
+                className="p-2 hover:bg-bg-soft dark:hover:bg-dark-border rounded-lg transition-all duration-300 hover:scale-110 hover:rotate-90 active:scale-95"
+              >
+                <X size={24} className="text-slate dark:text-dark-slate" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden animate-in fade-in duration-400 delay-150">
+              <CalendarView />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Expanded Modal for Tasks */}
+      {expandedModal === 'tasks' && (
+        <div className="fixed inset-0 z-50 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-dark-card rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-8 duration-500 ease-out origin-bottom">
+            <div className="flex items-center justify-between p-6 border-b border-border dark:border-dark-border">
+              <h2 className="text-2xl font-title text-slate dark:text-dark-slate animate-in fade-in duration-300 delay-100">Tasks</h2>
+              <button 
+                onClick={() => setExpandedModal(null)}
+                className="p-2 hover:bg-bg-soft dark:hover:bg-dark-border rounded-lg transition-all duration-300 hover:scale-110 hover:rotate-90 active:scale-95"
+              >
+                <X size={24} className="text-slate dark:text-dark-slate" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden animate-in fade-in duration-400 delay-150">
+              <Todo />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Expanded Modal for Notes */}
+      {expandedModal === 'notes' && (
+        <div className="fixed inset-0 z-50 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-dark-card rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-8 duration-500 ease-out origin-bottom">
+            <div className="flex items-center justify-between p-6 border-b border-border dark:border-dark-border">
+              <h2 className="text-2xl font-title text-slate dark:text-dark-slate animate-in fade-in duration-300 delay-100">Notes</h2>
+              <button 
+                onClick={() => setExpandedModal(null)}
+                className="p-2 hover:bg-bg-soft dark:hover:bg-dark-border rounded-lg transition-all duration-300 hover:scale-110 hover:rotate-90 active:scale-95"
+              >
+                <X size={24} className="text-slate dark:text-dark-slate" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden animate-in fade-in duration-400 delay-150">
+              <Notes />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Expanded Modal for Pomodoro */}
+      {expandedModal === 'pomodoro' && (
+        <div className="fixed inset-0 z-50 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-dark-card rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-8 duration-500 ease-out origin-bottom">
+            <div className="flex items-center justify-between p-6 border-b border-border dark:border-dark-border">
+              <h2 className="text-2xl font-title text-slate dark:text-dark-slate animate-in fade-in duration-300 delay-100">Pomodoro Timer</h2>
+              <button 
+                onClick={() => setExpandedModal(null)}
+                className="p-2 hover:bg-bg-soft dark:hover:bg-dark-border rounded-lg transition-all duration-300 hover:scale-110 hover:rotate-90 active:scale-95"
+              >
+                <X size={24} className="text-slate dark:text-dark-slate" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden animate-in fade-in duration-400 delay-150">
+              <Pomodoro />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Expanded Modal for AI Assistant with morphing animation */}
+      {expandedModal === 'chatbot' && (
+        <div className="fixed inset-0 z-50 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-dark-card rounded-3xl w-full max-w-4xl h-[90vh] flex flex-col shadow-2xl animate-in zoom-in-95 slide-in-from-bottom-8 duration-500 ease-out origin-bottom">
+            <div className="flex items-center justify-between p-6 border-b border-border dark:border-dark-border">
+              <h2 className="text-2xl font-title text-slate dark:text-dark-slate animate-in fade-in duration-300 delay-100">AI Assistant</h2>
+              <button 
+                onClick={() => setExpandedModal(null)}
+                className="p-2 hover:bg-bg-soft dark:hover:bg-dark-border rounded-lg transition-all duration-300 hover:scale-110 hover:rotate-90 active:scale-95"
+              >
+                <X size={24} className="text-slate dark:text-dark-slate" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-hidden animate-in fade-in duration-400 delay-150">
+              <Chatbot />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

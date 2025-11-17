@@ -106,7 +106,9 @@ export default function Chatbot(){
       const assistantMsg = { role: 'assistant', ...formatted }
       setLog(l => [...l, assistantMsg])
     }catch(err){
-      setLog(l => [...l, { role:'assistant', content: err.response?.data?.error || 'Something went wrong.', tone:'error' }])
+      console.error('Chatbot error:', err);
+      const errorMsg = err.response?.data?.error || err.message || 'Something went wrong.';
+      setLog(l => [...l, { role:'assistant', content: errorMsg, tone:'error' }])
     }finally{
       setInput('')
       setLoading(false)

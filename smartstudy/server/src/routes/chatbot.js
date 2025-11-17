@@ -184,14 +184,20 @@ router.post('/', async (req,res)=>{
   }catch(e){
     const groqError = e?.error ?? e?.response?.error ?? e?.response?.data?.error;
     const groqCode = groqError?.code;
+    console.error('Chatbot error details:', {
+      message: e.message,
+      groqCode,
+      groqMessage: groqError?.message,
+      fullError: e
+    });
     if(groqCode === 'model_decommissioned'){
       console.error('Groq model decommissioned:', groqError?.message);
       return res.status(503).json({
         error: 'The configured Groq model is no longer available. Update GROQ_MODEL (e.g. llama-3.3-70b-versatile) and restart the server.'
       });
     }
-    console.error(e);
-    res.status(500).json({ error: groqError?.message || e.message });
+    console.error('Full error:', e);
+    res.status(500).json({ error: groqError?.message || e.message || 'Internal server error' });
   }
 });
 export default router;
