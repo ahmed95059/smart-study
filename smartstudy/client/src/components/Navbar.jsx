@@ -1,5 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
+import { useTheme } from '../context/ThemeContext.jsx'
+import { Moon, Sun } from 'lucide-react'
 
 const navLinks = [
   { label: 'Home', href: '/' },
@@ -11,6 +13,7 @@ export default function Navbar(){
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  const { theme, toggle } = useTheme()
 
   if(location.pathname.startsWith('/dashboard')) return null
 
@@ -38,6 +41,15 @@ export default function Navbar(){
               <Link to="/signup" className="btn btn-primary">Get Started</Link>
             </>
           )}
+          <button
+            aria-label="Toggle theme"
+            className="btn border border-border flex items-center gap-2"
+            onClick={toggle}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? <Sun size={16}/> : <Moon size={16}/>}
+            <span className="text-xs">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+          </button>
         </div>
       </div>
     </header>

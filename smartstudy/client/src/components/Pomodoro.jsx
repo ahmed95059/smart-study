@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Play, RotateCcw, Timer } from 'lucide-react'
 
 const initialStats = () => {
   try{
@@ -88,34 +89,42 @@ export default function Pomodoro(){
   const ss = String(seconds % 60).padStart(2, '0')
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-title text-slate">Pomodoro Timer</h3>
-          <p className="text-xs uppercase tracking-[0.3em] text-muted">Focus • Break • Repeat</p>
+    <div className="space-y-6">
+      <div className="flex items-center gap-2">
+        <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center">
+          <Timer className="text-accent" size={20}/>
         </div>
-        <div className="text-right text-sm text-muted">
-          Sessions Today<br/><span className="text-2xl font-title text-slate">{stats.sessions}</span>
-        </div>
+        <h3 className="text-lg font-title text-slate">Pomodoro Timer</h3>
       </div>
 
-      <div className="rounded-[32px] bg-gradient-to-r from-primary/10 to-accent/10 border border-border p-10 text-center space-y-4">
-        <div className="text-5xl font-title text-slate">{mm}:{ss}</div>
+      <div className="text-center space-y-6 py-8">
+        <div className="text-7xl font-bold text-primary tracking-tight">{mm}:{ss}</div>
         <p className="text-sm text-muted">Focus Time</p>
-        <div className="flex justify-center gap-4">
-          <button className="btn btn-primary min-w-[120px]" onClick={toggle}>{running ? 'Pause' : 'Start'}</button>
-          <button className="btn border border-border" onClick={reset}>Reset</button>
+        
+        <div className="flex justify-center gap-3">
+          <button 
+            className="btn bg-accent hover:bg-accent/90 text-white flex items-center gap-2 px-8 py-3 rounded-xl font-semibold shadow-lg shadow-accent/30 hover:shadow-xl hover:shadow-accent/40 transition-all" 
+            onClick={toggle}
+          >
+            <Play size={18}/> {running ? 'Pause' : 'Start'}
+          </button>
+          <button 
+            className="btn bg-white dark:bg-[#182339] border border-border dark:border-[#1F2A44] hover:bg-gray-50 dark:hover:bg-[#1F2A44] text-slate dark:text-[#E6EAF4] flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all" 
+            onClick={reset}
+          >
+            <RotateCcw size={18}/> Reset
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 text-center">
-        <div className="rounded-2xl border border-border p-4 bg-white">
-          <p className="text-xs uppercase text-muted">Sessions Today</p>
-          <p className="text-2xl font-title text-primary">{stats.sessions}</p>
+      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border dark:border-[#1F2A44]">
+        <div className="text-center">
+          <p className="text-2xl font-bold text-slate">{stats.sessions}</p>
+          <p className="text-xs text-muted mt-1">Sessions Today</p>
         </div>
-        <div className="rounded-2xl border border-border p-4 bg-white">
-          <p className="text-xs uppercase text-muted">Total Focus</p>
-          <p className="text-2xl font-title text-slate">{stats.focusMinutes}m</p>
+        <div className="text-center">
+          <p className="text-2xl font-bold text-slate">{Math.floor(stats.focusMinutes / 60)}h {stats.focusMinutes % 60}m</p>
+          <p className="text-xs text-muted mt-1">Total Focus</p>
         </div>
       </div>
     </div>

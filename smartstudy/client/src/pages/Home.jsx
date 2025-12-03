@@ -36,14 +36,14 @@ export default function Home(){
       </section>
 
       <section className="max-w-6xl mx-auto px-4">
-        <div className="card bg-gradient-to-r from-white to-bg-soft flex flex-col md:flex-row items-center gap-8 p-10">
+        <div className="card bg-gradient-to-r from-bg-soft to-bg-soft dark:from-[#0B1220] dark:to-[#121A2B] flex flex-col md:flex-row items-center gap-8 p-10">
           <div className="flex-1 space-y-4">
             <p className="uppercase text-xs tracking-[0.35em] text-muted">Start now</p>
             <h3 className="text-3xl font-title text-slate">Start Your Journey Today</h3>
             <p className="text-muted">Create an account in minutes and unlock calendars, tasks, notes, Pomodoro, and AI scheduling in one place.</p>
             <div className="flex flex-wrap gap-4">
               <Link to="/signup" className="btn btn-primary">Create Account</Link>
-              <Link to="/login" className="btn border border-border">Log In</Link>
+              <Link to="/login" className="btn border border-border text-slate dark:text-[#E6EAF4]">Log In</Link>
             </div>
           </div>
           <div className="flex-1 grid grid-cols-2 gap-4 text-center">

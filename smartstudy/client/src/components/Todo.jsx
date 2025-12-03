@@ -78,10 +78,10 @@ export default function Todo(){
         ))}
       </div>
 
-      <div className="rounded-2xl border border-border bg-white/60 p-4 space-y-3">
+      <div className="rounded-2xl border border-border dark:border-[#1F2A44] bg-white/60 dark:bg-[#0D1525]/40 p-4 space-y-3">
         <div className="flex gap-2">
           <input
-            className="flex-1 border border-border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="flex-1 border border-border dark:border-[#1F2A44] rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/30 bg-white dark:bg-[#121A2B] text-slate dark:text-[#E6EAF4]"
             placeholder="Review calculus notes..."
             value={input}
             onChange={e=>setInput(e.target.value)}
@@ -94,7 +94,7 @@ export default function Todo(){
           {filtered.map(task => {
             const category = detectCategory(task.title)
             return (
-              <div key={task._id} className="flex items-center justify-between rounded-2xl border border-border px-4 py-3 bg-bg-soft">
+              <div key={task._id} className="flex items-center justify-between rounded-2xl border border-border dark:border-[#1F2A44] px-4 py-3 bg-bg-soft dark:bg-[#182339]">
                 <label className="flex items-center gap-3 max-w-[70%]">
                   <input type="checkbox" checked={task.done} onChange={()=>toggle(task)} />
                   <div>

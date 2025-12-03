@@ -10,7 +10,7 @@ const router = express.Router();
 router.use(requireAuth);
 const SYSTEM = `You are SmartStudy's AI assistant for schedules, tasks, and focus.
 Always output STRICT JSON (no prose) with this top-level shape:
-{"intent":"add_event|update_event|delete_event|get_events|add_task|update_task|delete_task|get_tasks|control_pomodoro|help","payload":{}}.
+{"intent":"add_event|update_event|delete_event|delete_events|get_events|add_task|update_task|delete_task|get_tasks|control_pomodoro|plan_schedule|plan_tasks|help","payload":{}}.
 
 Schemas:
 - add_event.payload: { "title": string, "start": ISO, "end": ISO, "allDay"?: boolean, "type"?: "event"|"course", "courseCode"?: string, "location"?: string, "notes"?: string }
@@ -22,32 +22,48 @@ Schemas:
 - delete_task.payload: { "id": string }
 - get_tasks.payload: { "status"?: "all"|"open"|"done", "dueBefore"?: ISO, "dueAfter"?: ISO }
 - control_pomodoro.payload: { "action": "start"|"stop"|"reset", "durationMinutes"?: number }
+- plan_schedule.payload: { "events": array of event objects (same structure as add_event.payload), "summary"?: string describing the plan }
+- plan_tasks.payload: { "tasks": array of task objects (same structure as add_task.payload), "summary"?: string describing the plan }
 - help.payload: { "prompt"?: string, "suggestions"?: string[] }
+- delete_events.payload: { "eventIds"?: string[], "filter"?: { "titleContains"?: string, "from"?: ISO, "to"?: ISO }, "confirm"?: boolean }
 
 Rules:
 - Prefer exact IDs from context when modifying or deleting items.
 - If information is missing (e.g., date or id), ask the user to clarify by returning intent "help" with a short prompt.
-- Never invent IDs.`;
+- Never invent IDs.
+- When a user requests a learning plan, study schedule, or wants to organize multiple events/tasks (e.g., "arrange my week for learning X"), use plan_schedule or plan_tasks intents.
+- For bulk operations, intelligently infer missing details: assign realistic times (e.g., study sessions in the morning/afternoon/evening), proper durations (1-2 hours for study sessions), logical progression of topics, and descriptive notes.
+- Break down complex topics into logical sub-topics or modules spread across multiple days.
+- Use current date context to schedule appropriately throughout the week.
+- Be specific and detailed in titles and notes for each event/task you create.
+- CRITICAL: When creating events, you MUST avoid scheduling conflicts. Review the list of existing events provided in the context and ensure no new events overlap with existing ones. Schedule around existing commitments by finding free time slots.`;
 router.post('/', async (req,res)=>{
   try{
     const { message } = req.body;
     if(!message) return res.status(400).json({ error: 'message required' });
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const twoWeeksLater = new Date(today);
+    twoWeeksLater.setDate(twoWeeksLater.getDate() + 14);
     const [upcomingEvents, openTasks] = await Promise.all([
-      Event.find({ userId: req.userId, start: { $gte: today } }).sort({ start: 1 }).limit(6),
+      Event.find({ userId: req.userId, start: { $gte: today, $lte: twoWeeksLater } }).sort({ start: 1 }),
       Task.find({ userId: req.userId, done: false }).sort({ due: 1, createdAt: -1 }).limit(6),
     ]);
     const contextPrompt = [
       `Today is ${now.toISOString()}. The user is in a generic timezone.`,
-      'Upcoming events (ID | title | ISO start | ISO end | location | notes):',
+      '',
+      'EXISTING EVENTS IN CALENDAR (next 2 weeks):',
       upcomingEvents.length
-        ? upcomingEvents.map(evt => `- ${evt._id} | ${evt.title} | ${evt.start.toISOString()} | ${evt.end.toISOString()} | ${evt.location || 'n/a'} | ${evt.notes || 'n/a'}`).join('\n')
-        : '- none scheduled',
+        ? upcomingEvents.map(evt => `- ${evt.title} | ${evt.start.toISOString()} to ${evt.end.toISOString()} | ${evt.location || 'no location'} | ID: ${evt._id}`).join('\n')
+        : '- No events scheduled',
+      '',
+      'IMPORTANT: When creating new events, you MUST check the times above and avoid any overlaps. Find free time slots between existing events.',
+      '',
       'Open tasks (ID | title | due ISO if any):',
       openTasks.length
         ? openTasks.map(task => `- ${task._id} | ${task.title} | ${task.due ? task.due.toISOString() : 'n/a'}`).join('\n')
         : '- no pending tasks',
+      '',
       'Use only the documented intents. When modifying or deleting items, reference IDs from the list above. Ask for clarification via help intent if details are missing.'
     ].join('\n');
 
@@ -179,6 +195,69 @@ router.post('/', async (req,res)=>{
         message,
         command: { action, durationSeconds },
       });
+    }
+    if(data.intent==='plan_schedule'){
+      const { events, summary } = data.payload;
+      const createdEvents = [];
+      for(const eventData of events){
+        const created = await Event.create({
+          ...eventData,
+          start: new Date(eventData.start),
+          end: new Date(eventData.end),
+          userId: req.userId
+        });
+        createdEvents.push(created);
+      }
+      return res.json({
+        ok: true,
+        action: 'plan_created',
+        events: createdEvents,
+        summary: summary || `Created ${createdEvents.length} event(s) for your schedule.`,
+        count: createdEvents.length
+      });
+    }
+    if(data.intent==='plan_tasks'){
+      const { tasks, summary } = data.payload;
+      const createdTasks = [];
+      for(const taskData of tasks){
+        const created = await Task.create({
+          userId: req.userId,
+          title: taskData.title,
+          notes: taskData.notes,
+          due: taskData.due ? new Date(taskData.due) : undefined,
+        });
+        createdTasks.push(created);
+      }
+      return res.json({
+        ok: true,
+        action: 'tasks_plan_created',
+        tasks: createdTasks,
+        summary: summary || `Created ${createdTasks.length} task(s) for your plan.`,
+        count: createdTasks.length
+      });
+    }
+    if(data.intent==='delete_events'){
+      const { eventIds, filter } = data.payload;
+      const query = { userId: req.userId };
+      if(Array.isArray(eventIds) && eventIds.length){
+        query._id = { $in: eventIds };
+      }else if(filter){
+        if(filter.titleContains){
+          query.title = { $regex: filter.titleContains, $options: 'i' };
+        }
+        if(filter.from || filter.to){
+          query.start = {};
+          if(filter.from) query.start.$gte = new Date(filter.from);
+          if(filter.to) query.start.$lte = new Date(filter.to);
+        }
+      }else{
+        return res.json({ ok:false, action:'error', error:'Provide eventIds or filter' });
+      }
+      const events = await Event.find(query).select('_id title start end');
+      if(!events.length) return res.json({ ok:true, action:'delete_none', count:0, events:[] });
+      const ids = events.map(e=>e._id);
+      await Event.deleteMany({ _id: { $in: ids }, userId: req.userId });
+      return res.json({ ok:true, action:'events_deleted', count: ids.length, events: events.map(e=>({ id: e._id.toString(), title: e.title })) });
     }
     return res.status(400).json({ error: 'Unhandled intent' });
   }catch(e){

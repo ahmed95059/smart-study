@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { listEvents } from '../api/events'
-import { CalendarDays, Clock3, MapPin } from 'lucide-react'
+import { Calendar, Clock3, MapPin } from 'lucide-react'
 
 const dateFormatter = new Intl.DateTimeFormat('en-US', { weekday:'short', month:'short', day:'numeric' })
 const timeFormatter = new Intl.DateTimeFormat('en-US', { hour:'numeric', minute:'2-digit' })
@@ -26,30 +26,30 @@ export default function UpcomingEvents(){
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <CalendarDays className="text-primary" size={20}/>
-          <h3 className="text-lg font-title text-slate">Upcoming Events</h3>
-        </div>
-        <span className="text-sm text-muted">{events.length} total</span>
+        <h3 className="text-lg font-title text-slate">Upcoming Events</h3>
       </div>
       <div className="space-y-3">
         {upcoming.map(evt => (
-          <div key={evt._id} className="rounded-2xl border border-border p-4 bg-white flex items-center justify-between">
-            <div>
-              <p className="font-semibold text-slate">{evt.title}</p>
-              <p className="text-xs text-muted flex items-center gap-2 mt-1">
-                <Clock3 size={12}/> {dateFormatter.format(evt.start)} · {timeFormatter.format(evt.start)}
-              </p>
+          <div key={evt._id} className="rounded-2xl border border-border dark:border-[#1F2A44] p-4 bg-white dark:bg-[#182339] flex items-start gap-4 hover:shadow-md transition-shadow">
+            <div className="text-primary font-semibold text-center min-w-[80px]">
+              <div className="text-2xl">{timeFormatter.format(evt.start)}</div>
+              <div className="text-xs text-muted mt-1">{evt.start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
             </div>
-            <div className="text-xs text-muted flex items-center gap-1">
-              {evt.location && (<><MapPin size={12}/> {evt.location}</>)}
-              {!evt.location && evt.type && <span className="pill capitalize">{evt.type}</span>}
+            <div className="flex-1">
+              <p className="font-semibold text-slate text-lg">{evt.title}</p>
+              {evt.location && (
+                <p className="text-sm text-muted flex items-center gap-1 mt-1">
+                  <MapPin size={12}/> {evt.location}
+                </p>
+              )}
             </div>
           </div>
         ))}
         {upcoming.length===0 && (
-          <div className="rounded-2xl border border-dashed border-border p-6 text-center text-muted text-sm">
-            No upcoming events. Use the calendar to add one!
+          <div className="rounded-2xl border border-dashed border-border dark:border-[#1F2A44] p-8 text-center bg-transparent">
+            <Calendar className="mx-auto mb-2 text-muted" size={32}/>
+            <p className="text-muted text-sm">No upcoming events</p>
+            <p className="text-xs text-muted mt-1">Use the calendar to add events</p>
           </div>
         )}
       </div>

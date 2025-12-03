@@ -1,3 +1,8 @@
+/* Dark mode: use orange accent for calendar events to match app */
+.dark .rbc-event { background: #f59e0b; color: #0B1220; border: none; }
+.dark .rbc-event.rbc-selected { background: #ea580c; color: #0B1220; }
+.dark .rbc-overlay .rbc-event { background: #f59e0b; color: #0B1220; }
+.dark .rbc-event-label { color: #0B1220; }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,3 +54,123 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.6);
   box-shadow: 0 15px 40px rgba(3, 27, 78, 0.08);
 }
+
+/* Dark mode overrides */
+.dark body {
+  background-color: #0B1220;
+  color: #E6EAF4;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #121A2B;
+  color: #E6EAF4;
+  border: 1px solid #1F2A44;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder { color: #8EA0BF; }
+
+.dark .btn { border-color: #1F2A44; }
+.dark .btn:hover { filter: brightness(1.05); }
+
+/* Generic overrides for commonly used raw classes */
+.dark .bg-white { background-color: #121A2B !important; }
+.dark .border-border { border-color: #1F2A44 !important; }
+.dark .text-muted { color: #A6B1C2 !important; }
+.dark .text-slate { color: #E6EAF4 !important; }
+.dark .bg-card { background-color: #121A2B !important; }
+.dark .bg-bg-soft { background-color: #0B1220 !important; }
+.dark .hover\:bg-white:hover { background-color: #101725 !important; }
+.dark .hover\:text-primary:hover { color: #9FB4FF !important; }
+.dark .shadow-soft { box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important; }
+
+.dark .card {
+  background-color: #121A2B;
+  border-color: #1F2A44;
+  box-shadow: none;
+}
+
+.dark .pill {
+  background-color: #121A2B;
+  border-color: #1F2A44;
+  color: #A6B1C2;
+}
+
+.dark .sidebar-link {
+  color: #A6B1C2;
+}
+
+.dark .sidebar-link:hover {
+  background-color: #101725;
+  color: white;
+}
+
+.dark .sidebar-link.active {
+  background-color: #101725;
+  color: white;
+}
+
+.dark .btn-primary {
+  background-color: #4B78FF;
+  color: white;
+}
+
+.dark .btn-accent {
+  background-color: #FFB661;
+  color: #0B1220;
+}
+
+.dark .glass {
+  background: rgba(18, 26, 43, 0.75);
+  border-color: rgba(255,255,255,0.06);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+}
+
+.dark .text-muted { color: #A6B1C2; }
+.dark .border-border { border-color: #1F2A44; }
+.dark .bg-bg-soft { background-color: #0B1220; }
+.dark .text-slate { color: #E6EAF4; }
+
+/* react-big-calendar dark theme fixes */
+.dark .rbc-calendar { background-color: #0B1220; color: #E6EAF4; }
+.dark .rbc-toolbar { border-bottom: 1px solid #1F2A44; }
+.dark .rbc-btn-group button { color: #A6B1C2; background: #121A2B; border: 1px solid #1F2A44; }
+.dark .rbc-btn-group button:hover { background: #101725; color: #E6EAF4; }
+.dark .rbc-btn-group .rbc-active { background: #182339; color: #E6EAF4; }
+.dark .rbc-month-view, .dark .rbc-time-view { border-color: #1F2A44; }
+.dark .rbc-month-row, .dark .rbc-time-content { border-color: #1F2A44; }
+.dark .rbc-header { border-color: #1F2A44; color: #A6B1C2; }
+.dark .rbc-off-range-bg { background: #0A0F1C; }
+.dark .rbc-today { background: rgba(75, 120, 255, 0.08); }
+.dark .rbc-event { background: #4B78FF; color: white; border: none; }
+.dark .rbc-event-label { color: #E6EAF4; }
+.dark .rbc-selected-cell { background: rgba(75, 120, 255, 0.12); }
+.dark .rbc-time-slot { border-color: #142038; }
+.dark .rbc-overlay { background: #121A2B; border: 1px solid #1F2A44; }
+.dark .rbc-overlay .rbc-event { background: #4B78FF; }
+
+/* Fix "+ more" link color in month view for dark mode */
+.dark .rbc-event-more,
+.dark .rbc-button-link {
+  color: #A6B1C2; /* muted slate to match headers */
+  text-decoration: none;
+}
+.dark .rbc-event-more:hover,
+.dark .rbc-button-link:hover {
+  color: #E6EAF4; /* brighter on hover for contrast */
+  text-decoration: underline;
+}
+
+/* Chatbot + Notes containers */
+.dark .chat-container, .dark .notes-container, .dark .todo-container { background-color: #121A2B; border-color: #1F2A44; }
+.dark .chat-bubble { background-color: #182339; color: #E6EAF4; }
+.dark .chat-bubble.assistant { background-color: #232F4A; }
+
+/* Upcoming events list */
+.dark .upcoming-event-item { background-color: #121A2B; border-color: #1F2A44; }
+.dark .upcoming-event-time { color: #B9C6E2; }
+
+/* Cards/containers frequently using bg-white */
+.dark .card, .dark .rounded-2xl.bg-white, .dark .rounded-xl.bg-white { background-color: #121A2B; border-color: #1F2A44; }

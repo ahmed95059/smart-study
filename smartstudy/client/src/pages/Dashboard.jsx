@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import CalendarView from "../components/CalendarView.jsx";
 import Pomodoro from "../components/Pomodoro.jsx";
 import Todo from "../components/Todo.jsx";
@@ -8,8 +8,9 @@ import StatsBar from "../components/StatsBar.jsx";
 import UpcomingEvents from "../components/UpcomingEvents.jsx";
 import Papa from "papaparse";
 import { createEvent } from "../api/events";
-import { CalendarDays, LayoutDashboard, ListTodo, LogOut, NotebookPen, Settings, Timer, Upload, Wand2 } from "lucide-react";
+import { CalendarDays, LayoutDashboard, ListTodo, LogOut, NotebookPen, Settings, Timer, Upload, Wand2, Moon, Sun } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useTheme } from "../context/ThemeContext.jsx";
 
 const mainNav = [
   { label: 'Dashboard', icon: LayoutDashboard, to: '/dashboard' },
@@ -28,6 +29,8 @@ const secondaryNav = [
 export default function Dashboard(){
   const fileRef = useRef();
   const { user, logout } = useAuth();
+  const { theme, toggle } = useTheme();
+  const [section, setSection] = useState('Dashboard');
 
   const initials = useMemo(()=>{
     if(!user?.name) return 'JD';
@@ -59,8 +62,8 @@ export default function Dashboard(){
   };
 
   return (
-    <div className="min-h-screen bg-bg-soft flex">
-      <aside className="hidden lg:flex w-64 flex-col bg-white border-r border-border p-6 space-y-8">
+    <div className="min-h-screen bg-bg-soft dark:bg-[#0B1220] flex">
+      <aside className="hidden lg:flex w-64 flex-col bg-white dark:bg-[#121A2B] border-r border-border dark:border-[#1F2A44] p-6 space-y-8">
         <div>
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-2xl bg-primary text-white flex items-center justify-center font-bold">S</div>
@@ -73,9 +76,13 @@ export default function Dashboard(){
         <nav className="flex flex-col gap-2">
           {mainNav.map(item => {
             const Icon = item.icon;
-            const active = item.label === 'Dashboard';
+            const active = section === item.label;
             return (
-              <button key={item.label} className={`sidebar-link ${active ? 'active' : ''}`}>
+              <button
+                key={item.label}
+                className={`sidebar-link ${active ? 'active' : ''}`}
+                onClick={() => setSection(item.label)}
+              >
                 <Icon size={18}/> {item.label}
               </button>
             )
@@ -95,7 +102,7 @@ export default function Dashboard(){
       </aside>
 
       <main className="flex-1 flex flex-col">
-        <header className="px-6 py-5 border-b border-border bg-white flex flex-wrap items-center justify-between gap-4">
+        <header className="px-6 py-5 border-b border-border dark:border-[#1F2A44] bg-white dark:bg-[#121A2B] flex flex-wrap items-center justify-between gap-4">
           <div>
             <p className="text-sm text-muted">Welcome back</p>
             <h1 className="text-3xl font-title text-slate">Dashboard</h1>
@@ -105,8 +112,17 @@ export default function Dashboard(){
               <Upload size={16}/> Import CSV
               <input ref={fileRef} type="file" accept=".csv" className="hidden" onChange={importCSV}/>
             </label>
+            <button
+              aria-label="Toggle theme"
+              className="btn border border-border flex items-center gap-2"
+              onClick={toggle}
+              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? <Sun size={16}/> : <Moon size={16}/>}
+              <span className="text-xs">{theme === 'dark' ? 'Light' : 'Dark'}</span>
+            </button>
             <button className="btn btn-accent lg:hidden" onClick={logout}>Logout</button>
-            <div className="flex items-center gap-3 bg-bg-soft px-4 py-2 rounded-full">
+            <div className="flex items-center gap-3 bg-bg-soft dark:bg-[#182339] px-4 py-2 rounded-full">
               <div>
                 <p className="text-xs text-muted">Student</p>
                 <p className="font-semibold text-slate">{user?.name || 'John Doe'}</p>
@@ -117,35 +133,69 @@ export default function Dashboard(){
         </header>
 
         <section className="p-6 space-y-6">
-          <StatsBar />
+          {section === 'Dashboard' && (
+            <>
+              <StatsBar />
+              <div className="card">
+                <UpcomingEvents />
+              </div>
+              <div className="grid gap-6 xl:grid-cols-3">
+                <div className="card xl:col-span-2">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-title text-slate">Calendar</h3>
+                  </div>
+                  <CalendarView />
+                </div>
+                <div className="card">
+                  <Todo />
+                </div>
+              </div>
+              <div className="grid gap-6 lg:grid-cols-3">
+                <div className="card">
+                  <Pomodoro />
+                </div>
+                <div className="card">
+                  <Notes />
+                </div>
+                <div className="card">
+                  <Chatbot />
+                </div>
+              </div>
+            </>
+          )}
 
-          <div className="grid gap-6 xl:grid-cols-3">
-            <div className="card xl:col-span-2">
+          {section === 'Calendar' && (
+            <div className="card">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-title text-slate">Calendar</h3>
               </div>
               <CalendarView />
             </div>
+          )}
+
+          {section === 'Tasks' && (
             <div className="card">
               <Todo />
             </div>
-          </div>
+          )}
 
-          <div className="card">
-            <UpcomingEvents />
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-3">
-            <div className="card">
-              <Pomodoro />
-            </div>
+          {section === 'Notes' && (
             <div className="card">
               <Notes />
             </div>
+          )}
+
+          {section === 'Pomodoro' && (
+            <div className="card">
+              <Pomodoro />
+            </div>
+          )}
+
+          {section === 'AI Assistant' && (
             <div className="card">
               <Chatbot />
             </div>
-          </div>
+          )}
         </section>
       </main>
     </div>
